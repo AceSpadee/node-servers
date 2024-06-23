@@ -27,38 +27,41 @@ app.post('/location', (req, res) => {
 
 // uses object destructuring to extract latitude and longitude from the request body. req.body contains the data sent by 
 // the client in the body of the POST request.
+// longitude and latitude are variables that hold the values of the coresponding properties
+
+// the client sends a post request to the /location endpoint with a json body containing latitude and longitude.
   const { latitude, longitude } = req.body;
 
-// if statement that says if longitude or latitude is null/ not listed than return a status of 404. else continue
+// if statement that says if longitude or latitude is null/ not listed than return a status of 400. else continue
   if (latitude == null || longitude == null) {
     return res.status(400).send('Latitude and longitude are required.');
   }
 
-//  =====================================================================================================================
-
-  // Read the existing locations from the JSON file
-  fs.readFile(filePath, 'utf8', (err, data) => {
-    if (err) return res.status(500).send(err.message); // Handle any errors that occur during file reading
-
-    // Parse the JSON data into a JavaScript array
-    const locations = JSON.parse(data);
-
-    // Create a new location object
-    const newLocation = {
-      id: locations.length + 1, // Incremental ID based on array length
-      latitude,
-      longitude,
-      timestamp: new Date().toISOString() // Current timestamp
-    };
-
-    // Add the new location to the locations array
-    locations.push(newLocation);
-
-    // Convert the updated array back to JSON and write it to the file
-    fs.writeFile(filePath, JSON.stringify(locations, null, 2), (err) => {
-      if (err) return res.status(500).send(err.message); // Handle any errors that occur during file writing
-
-      res.status(201).send('Location saved successfully!');
-    });
-  });
 });
+
+// ===========================================================================================================
+/*  app.post('/location', (req, res) => {
+      const { latitude, longitude } = req.body;
+
+        if (latitude == null || longitude == null) {
+          return res.status(400).send('Latitude and longitude are required.');
+        }
+          
+        fs.readFile(filePath, 'utf8', (err, data) => {
+          if (err) return res.status(500).send(err.message);
+          const locations = JSON.parse(data);
+          const newLocation = {
+            id: locations.length + 1,
+            latitude,
+            longitude,
+            timestamp: new Date().toISOString()
+          };
+
+          locations.push(newLocation);
+          fs.writeFile(filePath, JSON.stringify(locations, null, 2), (err) => {
+            if (err) return res.status(500).send(err.message);
+
+            res.status(201).send('Location saved successfully!');
+          });
+// ============================================================================================
+*/
